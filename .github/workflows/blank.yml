@@ -18,6 +18,18 @@ jobs:
       - name: Xcode-Version anzeigen
         run: xcodebuild -version
 
+      - name: Dateien in Ordner sortieren
+        run: |
+          mkdir -p Budget/Assets.xcassets/AppIcon.appiconset
+          for f in *.swift Info.plist; do
+            if [ -f "$f" ]; then mv "$f" Budget/; fi
+          done
+          if [ -f icon-1024.png ]; then mv icon-1024.png Budget/Assets.xcassets/AppIcon.appiconset/; fi
+          echo '{ "info" : { "author" : "xcode", "version" : 1 } }' > Budget/Assets.xcassets/Contents.json
+          echo '{ "images" : [ { "filename" : "icon-1024.png", "idiom" : "universal", "platform" : "ios", "size" : "1024x1024" } ], "info" : { "author" : "xcode", "version" : 1 } }' > Budget/Assets.xcassets/AppIcon.appiconset/Contents.json
+          rm -f "Contents.json" "Contents (1).json"
+          find Budget -type f
+
       - name: XcodeGen installieren
         run: brew install xcodegen
 
